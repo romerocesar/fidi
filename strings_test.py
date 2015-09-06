@@ -15,3 +15,9 @@ def test_one_away():
     # two edits
     second='bake'
     assert not strings.one_away(first, second)
+
+def test_edit_distance():
+    # arrange
+    a = 'kitten'
+    b = 'sitting'
+    assert strings.edit_distance(a,b) == 3

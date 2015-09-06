@@ -1,3 +1,4 @@
+import collections
 import logging
 
 logger = logging.getLogger(__name__)
@@ -24,5 +25,15 @@ def one_away(first, second):
     logger.info(ans)
     return ans
 
-def edit_distance(first, second):
-    pass
+_ed = collections.defaultdict(dict)
+def edit_distance(a, b):
+    'https://en.wikipedia.org/wiki/Levenshtein_distance'
+    i,j = len(a), len(b)
+    if min(i,j) == 0:
+        _ed[a][b] = max(i,j)
+        return _ed[a][b]
+    replace = edit_distance(a[1:], b[1:]) + 1*(a[0] != b[0])
+    remove = edit_distance(a[1:], b) + 1
+    add = edit_distance(a, b[1:]) + 1
+    _ed[a][b] =  min(replace, remove, add)
+    return _ed[a][b]
