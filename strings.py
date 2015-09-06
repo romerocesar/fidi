@@ -28,12 +28,18 @@ def one_away(first, second):
 _ed = collections.defaultdict(dict)
 def edit_distance(a, b):
     'https://en.wikipedia.org/wiki/Levenshtein_distance'
+    logger.debug(dict(a=a,b=b))
+    if b in _ed[a]:
+        logger.info('found {}'.format(_ed[a][b]))
+        return _ed[a][b]
     i,j = len(a), len(b)
     if min(i,j) == 0:
         _ed[a][b] = max(i,j)
+        logger.info(_ed[a][b])
         return _ed[a][b]
     replace = edit_distance(a[1:], b[1:]) + 1*(a[0] != b[0])
     remove = edit_distance(a[1:], b) + 1
     add = edit_distance(a, b[1:]) + 1
     _ed[a][b] =  min(replace, remove, add)
+    logger.info(_ed[a][b])
     return _ed[a][b]
