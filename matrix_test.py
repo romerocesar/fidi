@@ -19,3 +19,7 @@ def test_rotate():
     c = matrix.rotate(a)
     # assert
     assert b == c
+    assert c != a
+    # act inplace
+    c = matrix.rotate(a, inplace=True)
+    assert b == c == a

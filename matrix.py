@@ -1,30 +1,28 @@
 import logging
+import pprint
 
 logger = logging.getLogger(__name__)
 
 def rotate(m, inplace=False):
-    '''rotates the input matrix by 90 degrees. Assumes the input matrix is
-    square'''
+    '''rotaTes The Input Matrix By 90 Degrees clockwise. Assumes the input
+    matrix is square
+    '''
     assert len(m) == len(m[0])
     N = len(m)
-    # initialize target sequence
-    target = []
-    ix = N - 1
-    last = N*N
-    for i in range(N*N):
-        target.append(ix)
-        ix = ix + N
-        # wrap up and to the left
-        if last < ix:
-            ix = ix % last - 1
-    ans = [[-1 for x in range(N)] for x in range(N)]
-    for s,t in enumerate(target):
-        # source indices
-        si = s // N
-        sj = s % N
-        # target indices
-        ti = t // N
-        tj = t % N
-        # copy
-        ans[ti][tj] = m[si][sj]
+    ans = m
+    if not inplace:
+        ans = [[-1 for x in range(N)] for x in range(N)]
+
+    for layer in range(N//2):
+        for i in range(layer,N-1-layer):
+            top = m[layer][i]
+            right = m[i][N-1-layer]
+            bottom = m[N-1-layer][N-1-i]
+            left = m[N-1-i][layer]
+
+            ans[layer][i] = left
+            ans[i][N-1-layer] = top
+            ans[N-1-layer][N-1-i] = right
+            ans[N-1-i][layer] = bottom
+
     return ans
