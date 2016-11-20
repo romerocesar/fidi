@@ -3,6 +3,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 def one_away(first, second):
     '''determine whether the two words are at most one edit away from each
     other'''
@@ -11,7 +12,7 @@ def one_away(first, second):
     # some cases.
     distance = 0
     ans = True
-    for i,c in enumerate(first):
+    for i, c in enumerate(first):
         if first[i] != second[i]:
             distance += 1
             if len(first) == len(second) + 1:
@@ -28,18 +29,44 @@ def one_away(first, second):
 _ed = collections.defaultdict(dict)
 def edit_distance(a, b):
     'https://en.wikipedia.org/wiki/Levenshtein_distance'
-    logger.debug(dict(a=a,b=b))
+    logger.debug(dict(a=a, b=b))
     if b in _ed[a]:
         logger.info('found {}'.format(_ed[a][b]))
         return _ed[a][b]
-    i,j = len(a), len(b)
-    if min(i,j) == 0:
-        _ed[a][b] = max(i,j)
+    i, j = len(a), len(b)
+    if min(i, j) == 0:
+        _ed[a][b] = max(i, j)
         logger.info(_ed[a][b])
         return _ed[a][b]
     replace = edit_distance(a[1:], b[1:]) + 1*(a[0] != b[0])
     remove = edit_distance(a[1:], b) + 1
     add = edit_distance(a, b[1:]) + 1
-    _ed[a][b] =  min(replace, remove, add)
+    _ed[a][b] = min(replace, remove, add)
     logger.info(_ed[a][b])
     return _ed[a][b]
+
+
+def longest_prefix(a, b):
+    'returns the longest prefix common to both strings'
+    if not a or not b:
+        return ''
+    for i, c in enumerate(a):
+        if len(b) <= i:
+            return b
+        if b[i] != c:
+            return a[:i]
+    return a
+
+
+def suffix_similarities(word):
+    '''calculates the sum of similarities of a string S with each of its
+    suffixes, including the string itself as the first suffix'''
+    ans = len(word)
+    for i in range(1, len(word)):
+        for j in range(i, len(word)):
+            if word[j] != word[j-i]:
+                ans += j-i
+                break
+        else:
+            ans += len(word) - i
+    return ans
