@@ -25,3 +25,29 @@ def lis(seq):
     pass
 
 
+def min_jumps(A, start=0, jumps=None):
+    '''Given an array of non-negative integers, you are initially
+    positioned at the first index of the array. Each element in the
+    array represents your maximum jump length at that position. Your
+    goal is to reach the last index in the minimum number of jumps.'''
+    ans = -1
+    jumps = jumps or [-1]*len(A)
+    if jumps[start] != -1:
+        return jumps[start]
+    if start == len(A) - 1:
+        return 0
+    for step in range(A[start], 0, -1):
+        _start = start+step
+        if _start >= len(A):
+            continue
+        _jumps = min_jumps(A, _start, jumps)
+        if _jumps == -1:
+            continue
+        if ans == -1:
+            ans = _jumps + 1
+        else:
+            ans = min(ans, _jumps + 1)
+    if not ans:
+        import pdb;pdb.set_trace()
+    jumps[start] = ans
+    return jumps[start]
