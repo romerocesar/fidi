@@ -47,7 +47,34 @@ def min_jumps(A, start=0, jumps=None):
             ans = _jumps + 1
         else:
             ans = min(ans, _jumps + 1)
-    if not ans:
-        import pdb;pdb.set_trace()
     jumps[start] = ans
     return jumps[start]
+
+
+def celebrity(guests, knows):
+    i, j = 0, 1
+    while j < len(guests) and i < len(guests):
+        if knows(guests[i], guests[j]):
+            i = max(i, j) + 1
+        else:
+            j = max(i, j) + 1
+    # validate celeb status
+    celeb = guests[min(i, j)]
+    for guest in guests:
+        if not knows(guest, celeb):
+            return -1
+    return celeb
+
+def triangles(A):
+    A.sort()
+    ans = 0
+    for h in range(len(A)-1, 1, -1):
+        l, m = 0, h-1
+        while l != m:
+            if A[l] + A[m] > A[h]:
+                ans += m - l
+                m = m - 1
+            else:
+                l += 1
+        
+    return ans
