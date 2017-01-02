@@ -70,3 +70,30 @@ def suffix_similarities(word):
         else:
             ans += len(word) - i
     return ans
+
+
+def prefix(a, b):
+    'returns the longest prefix common to both strings'
+    i = 0
+    while i < len(a) and i < len(b) and a[i] == b[i]:
+        i += 1
+    return a[:i]
+        
+
+class Trie():
+
+    def __init__(self, words):
+        if type(words) == str:
+            self.symbol = words[0]
+            self.terminal = len(words) == 1
+            self.children = {self.symbol: Trie(words[1:])}
+        elif type(words) == list:
+            self.symbol = ''
+            self.children = {}
+            self.terminal = False
+            for word in words:
+                c = word[0]
+                self.children[c] = Trie(word[1:])
+
+    def add(self, word):
+        pass

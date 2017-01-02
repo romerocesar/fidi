@@ -1,3 +1,8 @@
+import logging
+
+from collections import defaultdict
+
+
 def permute(A, exclude=None):
     '''returns all possible _unique_ permutations of A'''
     exclude = exclude or set()
@@ -78,3 +83,62 @@ def triangles(A):
                 l += 1
         
     return ans
+
+
+def equal(A):
+    '''Given an array A of integers, find the index of values that satisfy
+    A + B = C + D, where A,B,C & D are integers values in the array'''
+    idx = defaultdict(list)
+    for i, v in enumerate(A):
+        idx[v].append(i)
+    for a in range(len(A)):
+        for b in range(a+1, len(A)):
+            for c in range(a+1, len(A)):
+                if b == c:
+                    continue
+                v = A[a] + A[b] - A[c]
+                for d in idx.get(v, []):
+                    if d > c and d != b:
+                        return [a, b, c, d]
+    return []
+
+
+def bulbs(A):
+    ans = 0
+    curr = -1
+    for bulb in A:
+        if not bulb and not ans:
+            ans = 1
+            curr = 0
+        elif not bulb and curr != bulb:
+            ans += 1
+            curr = bulb
+        elif bulb and ans and bulb != curr:
+            ans += 1
+            curr = bulb
+    return ans
+
+
+def highest_product(A):
+    A.sort()
+    a, b, c = A[-3:]
+    return max(a*b*c, A[0]*A[1]*A[-1])
+
+
+def candies(A):
+    candies = [-1] * len(A)
+    children = sorted([(rating, pos) for pos, rating in enumerate(A)])
+    for rating, pos in children:
+        if candies[pos] != -1:
+            continue
+        candies[pos] = 1
+        j = pos - 1
+        while j >= 0 and A[j] > A[j + 1]:
+            candies[j] = max(candies[j + 1] + 1, candies[j])
+            j -= 1
+        j = pos + 1
+        while j < len(A) and A[j] > A[j - 1]:
+            candies[j] = max(candies[j - 1] + 1, candies[j])
+            j += 1
+
+    return sum(candies)

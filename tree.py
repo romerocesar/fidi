@@ -7,8 +7,8 @@ class TreeNode:
 def reconstruct(pre, inorder):
     relem = pre[0]
     ri = index(root, inorder)
-    left = [:ri]
-    right = [ri+1:]
+    left = inorder[:ri]
+    right = inorder[ri+1:]
     rleft = reconstruct(pre[1:len(left)], left)
     rright = reconstruct(pre[len(left)+1:], right)
     return BTree(left = rleft, right= rright, root=relem)
@@ -54,3 +54,14 @@ def invertTree(root):
         return root
     root.left, root.right = invertTree(root.right), invertTree(root.left)
     return root
+
+def every_bst(lo=1, hi=3):
+    '''Generates all structurally unique BSTs that store values 1..n'''
+    # import pdb;pdb.set_trace()
+    ans = []
+    for root in range(lo, hi+1):
+        for right in every_bst(root+1, hi):
+            for left in every_bst(lo, root-1):
+                ans.append(TreeNode(root, left=left, right=right))
+    ans = ans or [None]
+    return ans

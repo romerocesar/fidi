@@ -1,7 +1,9 @@
 import logging
-import pprint
+
+from collections import defaultdict
 
 logger = logging.getLogger(__name__)
+
 
 def rotate(m, inplace=False):
     '''rotates The Input Matrix By 90 Degrees clockwise. Assumes the input
@@ -11,7 +13,7 @@ def rotate(m, inplace=False):
     N = len(m)
     ans = m
     if not inplace:
-        ans = [[-1 for x in range(N)] for x in range(N)]
+        ans = [row[:] for row in m]
 
     for layer in range(N//2):
         for i in range(layer, N-1-layer):
@@ -43,3 +45,36 @@ def min_sum_path(M, x=0, y=0, path=None):
     path[x][y] = M[x][y] + min(min_sum_path(M, x+1, y, path),
                                min_sum_path(M, x, y+1, path))
     return path[x][y]
+
+
+def boggle(words, n):
+    '''given words, generate an nxn board of boggle where every row and
+    column contains a valid word when read forward or backward'''
+    words = set(words)
+    candidates = {word for word in words if len(word) == n and reversed(word) in words}
+    # start with empty board
+
+
+def valid_sudoku(board):
+    columns = [defaultdict(int) for i in range(9)]
+    rows = [defaultdict(int) for i in range(9)]
+    matrices = [[defaultdict(int) for i in range(3)] for j in range(3)]
+    # aggregate by set
+    for i in range(9):
+        for j in range(9):
+            rows[i][board[i][j]] += 1
+            columns[j][board[i][j]] += 1
+            matrices[i//3][j//3][board[i][j]] += 1
+    # validate sets
+    for i in range(9):
+        for k, v in columns[i].items():
+            if k != '.' and v > 1:
+                return False
+        for k, v in rows[i].items():
+            if k != '.' and v > 1:
+                return False
+        x, y = i//3, i % 3
+        for k, v in matrices[x][y].items():
+            if k != '.' and v > 1:
+                return False
+    return True

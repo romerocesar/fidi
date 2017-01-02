@@ -24,3 +24,30 @@ def test_min_sum():
         [31, 45, 47, 100, 65, 10, 94, 96, 81, 14]
     ]
     assert 470 == matrix.min_sum_path(M)
+
+
+def test_rotate():
+    # arrange
+    m = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+    expected = [[7, 4, 1], [8, 5, 2], [9, 6, 3]]
+    # act
+    actual = matrix.rotate(m)
+    # assert
+    assert expected == actual
+
+
+def test_valid_sudoku():
+    # arrange
+    invalid = [[1]*9 for i in range(9)]
+    valid = ["53..7....",
+             "6..195...",
+             ".98....6.",
+             "8...6...3",
+             "4..8.3..1",
+             "7...2...6",
+             ".6....28.",
+             "...419..5",
+             "....8..79"]
+    # assert
+    assert matrix.valid_sudoku(valid)
+    assert not matrix.valid_sudoku(invalid)
