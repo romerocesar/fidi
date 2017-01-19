@@ -1,3 +1,5 @@
+import collections
+import numbers
 import logging
 
 from collections import defaultdict
@@ -22,6 +24,19 @@ def permute(A, exclude=None):
     for p in seen:
         ans.append([int(x) for x in p.split('-')])
     return ans
+
+
+def count_unique_permutations(A):
+    '''returns the number of unique permutations that can be generated
+    with the elements in A'''
+    num = numbers.fac(len(A))
+    d = defaultdict(int)
+    for x in A:
+        d[x] += 1
+    den = 1
+    for v in d.values():
+        den = den * numbers.fac(v)
+    return num//den
 
 
 def lis(seq):
@@ -70,6 +85,7 @@ def celebrity(guests, knows):
             return -1
     return celeb
 
+
 def triangles(A):
     A.sort()
     ans = 0
@@ -81,7 +97,7 @@ def triangles(A):
                 m = m - 1
             else:
                 l += 1
-        
+
     return ans
 
 
@@ -142,3 +158,68 @@ def candies(A):
             j += 1
 
     return sum(candies)
+
+
+def merge_overlaps(intervals):
+    intervals.sort()
+    ans = []
+    interval = None
+    for s, e in intervals:
+        if not interval:
+            interval = [s, e]
+        elif interval[1] >= s:
+            interval[1] = max(e, interval[1])
+        else:
+            ans.append(tuple(interval))
+            interval = [s, e]
+    ans.append(tuple(interval))
+    return ans
+
+
+def set_zeros(A):
+    row = 0 if 0 in A[0] else 1
+    col = 0 if 0 in [r[0] for r in A] else 1
+    for i in range(1, len(A)):
+        for j in range(1, len(A[0])):
+            if A[i][j] == 0:
+                A[0][j] = 0
+                A[i][0] = 0
+
+    for r in range(1, len(A)):
+        if A[r][0] == 1:
+            continue
+        for c in range(len(A[0])):
+            A[r][c] = 0
+    for c in range(1, len(A[0])):
+        if A[0][c] == 1:
+            continue
+        for r in range(len(A)):
+            A[r][c] = 0
+
+    if not row:
+        for c in range(len(A[0])):
+            A[0][c] = 0
+    if not col:
+        for r in range(len(A)):
+            A[r][0] = 0
+
+    return A
+
+
+def unique_numbers(A, k):
+    d = collections.defaultdict(int)
+    for i in range(k):
+        d[A[i]] += 1
+    count = len(d.keys())
+    ans = [count]
+    i = 0
+    for j in range(k, len(A)):
+        d[A[i]] -= 1
+        if not d[A[i]]:
+            count -= 1
+        d[A[j]] += 1
+        if d[A[j]] == 1:
+            count += 1
+        ans.append(count)
+        i += 1
+    return ans

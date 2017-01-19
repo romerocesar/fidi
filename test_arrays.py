@@ -5,13 +5,63 @@ import random
 logging.basicConfig(level=logging.DEBUG)
 
 
+def test_unique_numbers():
+    # arrange
+    A = [1,2,1,3,4,3]
+    k = 3
+    # act
+    actual = arrays.unique_numbers(A, k)
+    expected = [2,3,3,2]
+    # assert
+    assert actual == expected
+    
+
+def test_set_zeros():
+    # arrange
+    A = [[1,0,1],
+         [1,1,1],
+         [1,0,1]]
+    actual = arrays.set_zeros(A)
+    expected = [[0,0,0],
+                [1,0,1],
+                [0,0,0]]
+    assert actual == expected
+    # arrange
+    A = [[1,0],
+         [1,1]]
+    actual = arrays.set_zeros(A)
+    expected = [[0,0],
+                [1,0]]
+    assert actual == expected
+
+
+def test_merge_overlaps():
+    # arrange
+    intervals = [(1, 3), (2, 6), (8, 10), (15, 18)]
+    # act
+    actual = arrays.merge_overlaps(intervals)
+    expected = [(1, 6), (8, 10), (15, 18)]
+    # assert
+    assert expected == actual
+    # arrange
+    intervals = [(1, 10), (2, 9), (3, 8), (4, 7), (5, 6), (6, 6)]
+    expected = [(1, 10)]
+    actual = arrays.merge_overlaps(intervals)
+    assert expected == actual
+
+
+def test_count_unique_permutations():
+    assert arrays.count_unique_permutations([1, 1, 1, 3]) == 4
+    assert arrays.count_unique_permutations(list(range(4))) == 24
+
+
 def test_permute():
     # arrange
-    A = [1,1,2]
+    A = [1, 1, 2]
     # act
     p = arrays.permute(A)
     # assert
-    assert sorted(p) == [[1,1,2],[1,2,1],[2,1,1]]
+    assert sorted(p) == [[1, 1, 2], [1, 2, 1], [2, 1, 1]]
 
 
 def test_min_jumps():

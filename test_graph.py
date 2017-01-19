@@ -32,3 +32,4 @@ def test_topo_sort():
     # act
     assert list(graph.topo_sort(g)) == ['a', 'b', 'c', 'd', 'e']
 
+
