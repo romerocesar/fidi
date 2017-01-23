@@ -5,6 +5,15 @@ import random
 logging.basicConfig(level=logging.DEBUG)
 
 
+def test_bin_search():
+    A = [1, 3, 5, 6]
+    assert arrays.bin_search(A, 5) == 2
+    assert arrays.bin_search(A, 2) == 1
+    assert arrays.bin_search(A, 7) == 4
+    assert arrays.bin_search(A, 0) == 0
+    assert arrays.bin_search([1], 1) == 0
+
+
 def test_unique_numbers():
     # arrange
     A = [1,2,1,3,4,3]

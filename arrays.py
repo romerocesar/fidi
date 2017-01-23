@@ -223,3 +223,23 @@ def unique_numbers(A, k):
         ans.append(count)
         i += 1
     return ans
+
+
+def bin_search(A, x):
+    l, u = 0, len(A) - 1
+    c = (l + u) // 2
+    while c != l:
+        if A[c] == x:
+            return c
+        elif A[c] > x:
+            u = c
+        else:
+            l = c
+        c = (l + u) // 2
+
+    if A[l] >= x:
+        return l
+    elif A[l] < x <= A[u]:
+        return u
+    else:
+        return u + 1

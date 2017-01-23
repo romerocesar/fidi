@@ -3,14 +3,76 @@ import logging
 import strings
 
 
-logging.basicConfig(level=logging.DEBUG)
-
-
 class GraphNone(object):
     def __init__(self, v, o=None, i=None):
         self.v = v
         self.i = i or set()
         self.o = o or set()
+
+
+def successors(words):
+    groups = collections.defaultdict(list)
+    keys = collections.defaultdict(list)
+    for word in words:
+        for i in range(len(word)):
+            key = word[:i] + '-' + word[i+1:]
+            keys[word].append(key)
+            groups[key].append(word)
+    ans = dict()
+    for word in words:
+        succ = []
+        for key in keys[word]:
+            succ += groups[key]
+        ans[word] = set(succ)
+        ans[word].remove(word)
+    return ans
+
+
+def succ(a, b):
+    if len(a) != len(b):
+        return False
+    misses = 0
+    for i in range(len(a)):
+        if a[i] != b[i]:
+            misses += 1
+            if misses > 1:
+                return False
+    return True
+
+
+def word_ladder(start, end, words, depth=0, bound=None, cache=None, seen=None):
+    logging.debug('word_ladder({},{},{},{},{},{},{})'.format(start, end, words, depth, bound, cache, seen))
+    if start == end:
+        return (True, [[end]])
+    elif succ(start, end):
+        return (True, [[start, end]])
+    bound = bound or len(words)
+    if depth > bound:
+        return (False, [])
+    if cache is None:
+        cache = dict()
+    if start in cache:
+        return cache[start]
+    seen = seen or set()
+    seen.add(start)
+    goal = False
+    paths = []
+    for word in words:
+        if word == start or not succ(start, word) or word in seen:
+            continue
+        _goal, _paths = word_ladder(word, end, words, depth+1, bound, cache, seen)
+        if not _goal:
+            continue
+        goal = True
+        if len(_paths[0]) < bound:
+            paths = []
+            bound = len(_paths[0])
+        for path in _paths:
+            paths.append([start] + path)
+    seen.remove(start)
+    cache[start] = (goal, paths)
+    logging.info('word_ladder:{}'.format(cache[start]))
+    return cache[start]
 
 
 def dfbnb(node):

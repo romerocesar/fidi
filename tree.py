@@ -1,8 +1,29 @@
 class TreeNode:
+
     def __init__(self, x, left=None, right=None):
         self.val = x
         self.left = left
         self.right = right
+
+
+    def __str__(self):
+        return '({} {} {})'.format(self.left, self.val, self.right)
+
+
+def from_array(A, l=0, u=None):
+    'from sorted array A'
+    if u is None:
+        u = len(A) - 1
+    if u < l:
+        return None
+    elif u == l:
+        return TreeNode(A[l])
+    root = (l + u) // 2
+    ans = TreeNode(A[root])
+    ans.left = from_array(A, l, root - 1)
+    ans.right = from_array(A, root + 1, u)
+    return ans
+
 
 def reconstruct(pre, inorder):
     relem = pre[0]
@@ -54,6 +75,7 @@ def invertTree(root):
         return root
     root.left, root.right = invertTree(root.right), invertTree(root.left)
     return root
+
 
 def every_bst(lo=1, hi=3):
     '''Generates all structurally unique BSTs that store values 1..n'''
