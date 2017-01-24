@@ -40,32 +40,34 @@ def succ(a, b):
     return True
 
 
-def word_ladder(start, end, words, depth=0, bound=None, cache=None, seen=None):
-    logging.debug('word_ladder({},{},{},{},{},{},{})'.format(start, end, words, depth, bound, cache, seen))
+def word_ladder(start, end, words, bound=None, cache=None, seen=None):
+    logging.debug('word_ladder({},{},{},{},{},{})'.format(start, end, words, bound, cache, seen))
     if start == end:
         return (True, [[end]])
     elif succ(start, end):
-        return (True, [[start, end]])
+        ans = (True, [[start, end]])
+        logging.info('word_ladder:{}'.format(ans))
+        return ans
     bound = bound or len(words)
-    if depth > bound:
+    if not bound:
         return (False, [])
     if cache is None:
         cache = dict()
-    if start in cache:
-        return cache[start]
+    # if start in cache:
+    #     return cache[start]
     seen = seen or set()
     seen.add(start)
     goal = False
     paths = []
-    for word in words:
+    for word in set(words):
         if word == start or not succ(start, word) or word in seen:
             continue
-        _goal, _paths = word_ladder(word, end, words, depth+1, bound, cache, seen)
-        if not _goal:
+        _goal, _paths = word_ladder(word, end, words, bound-1, cache, seen)
+        if not _goal or len(_paths[0]) > bound:
             continue
         goal = True
         if len(_paths[0]) < bound:
-            paths = []
+            paths[:] = []
             bound = len(_paths[0])
         for path in _paths:
             paths.append([start] + path)

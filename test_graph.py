@@ -56,7 +56,7 @@ def test_word_ladder():
     words = ['hot', 'dot', 'dog', 'lot', 'log']
     start = 'hit'
     end = 'cog'
-    expected = (True, [['hit', 'hot', 'dot', 'dog', 'cog'], ['hit', 'hot', 'lot', 'log', 'cog']])
+    expected = (True, [['hit', 'hot', 'lot', 'log', 'cog'], ['hit', 'hot', 'dot', 'dog', 'cog']])
     # act
     actual = graph.word_ladder(start, end, words)
     # assert
@@ -67,5 +67,5 @@ def test_word_ladder():
     start = 'bbaa'
     end = 'babb'
     actual = graph.word_ladder(start, end, words)
-    logging.debug(actual)
-    assert 0
+    expected = [['bbaa', 'bbba', 'baba', 'babb'], ['bbaa', 'bbba', 'bbbb', 'babb'], ['bbaa', 'baaa', 'baba', 'babb']]
+    assert actual[1] == expected
