@@ -86,16 +86,24 @@ def max_sum_square_submat(a, b):
     is maximum.'''
     ans = float('-inf')
     N = len(a)
-    for s in range(N*N):
-        if s % N + b > N or s // N + b > N:
+    cols = a[:]
+    for x in range(N*N):
+        row = x//N
+        col = x%N
+        if row:
+            cols[row][col] += cols[row-1][col]
+
+    for x in range(0, N*N):
+        row = x//N
+        col = x%N
+        if col + b > N:
             continue
-        cumsum = 0
-        row = s//N
-        for i in range(row, row+b):
-            col = s%N
-            for j in range(col, col+b):
-                cumsum += a[i][j]
+        if row + b > N:
+            break
+        cumsum = sum(cols[row+b-1][col:col+b])
+        if row:
+            cumsum -= sum(cols[row-1][col:col+b])
+
         ans = max(ans, cumsum)
 
     return ans
-    
