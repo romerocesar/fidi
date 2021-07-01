@@ -1,7 +1,7 @@
+from collections import defaultdict
 import logging
 
-from collections import defaultdict
-
+logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 
@@ -78,3 +78,24 @@ def valid_sudoku(board):
             if k != '.' and v > 1:
                 return False
     return True
+
+
+def max_sum_square_submat(a, b):
+    '''Given a 2D integer matrix A of size N x N find a B x B submatrix
+    where B<= N and B>= 1, such that sum of all the elements in submatrix
+    is maximum.'''
+    ans = float('-inf')
+    N = len(a)
+    for s in range(N*N):
+        if s % N + b > N or s // N + b > N:
+            continue
+        cumsum = 0
+        row = s//N
+        for i in range(row, row+b):
+            col = s%N
+            for j in range(col, col+b):
+                cumsum += a[i][j]
+        ans = max(ans, cumsum)
+
+    return ans
+    

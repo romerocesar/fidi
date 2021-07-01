@@ -1,4 +1,7 @@
+import logging
 import matrix
+
+logging.basicConfig(level=logging.DEBUG)
 
 
 def test_min_sum():
@@ -51,3 +54,24 @@ def test_valid_sudoku():
     # assert
     assert matrix.valid_sudoku(valid)
     assert not matrix.valid_sudoku(invalid)
+
+
+def test_max_sum_square_submat():
+    # arrange
+    A = [
+        [1, 1, 1, 1, 1],
+        [2, 2, 2, 2, 2],
+        [3, 8, 6, 7, 3],
+        [4, 4, 4, 4, 4],
+        [5, 5, 5, 5, 5]
+     ]
+    B = 3
+    expected = 48
+    actual = matrix.max_sum_square_submat(A, B)
+    assert actual == expected
+    A = [
+        [2, 2],
+        [2, 2]
+    ]
+    B = 2
+    assert matrix.max_sum_square_submat(A, B) == 8

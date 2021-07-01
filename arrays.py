@@ -243,3 +243,39 @@ def bin_search(A, x):
         return u
     else:
         return u + 1
+
+    
+def max_sub_array(a):
+    'finds the contiguous subarray of a'
+    ans = float('-inf')
+    cumsum = float('-inf')
+    for i,x in enumerate(a):
+        if cumsum > 0:
+            cumsum += x
+        else:
+            cumsum = max(cumsum, x)
+        ans = max(ans, cumsum)
+    
+    return ans
+
+
+def first_missing_positive(a):
+    'a is unsorted, find the first missing positive integer. expect O(n) time and O(n) space'
+    a = set(a)
+    for x in range(1, len(a)+2):
+        if x not in a:
+            return x
+
+def first_missing_positive(a):
+    'a is unsorted, find the first missing positive integer. expect O(n) time and O(1) space.'
+    for i in range(len(a)):
+        v = a[i]
+        while 0 < v < len(a)+1 and a[v-1] != v:
+            tmp = a[v-1]
+            a[v-1] = v
+            v = tmp
+    for i,x in enumerate(a):
+        if x != i+1:
+            return i+1
+    return len(a)+1
+
