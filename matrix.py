@@ -107,3 +107,27 @@ def max_sum_square_submat(a, b):
         ans = max(ans, cumsum)
 
     return ans
+
+
+def sudoku(puzzle):
+    '''incomplete easy sudoku solver'''
+    rows = [set(r) for r in puzzle]
+    cols = [set([row[c] for row in puzzle]) for c in range(9)]
+    regions = [set() for g in range(9)]
+    while True:
+        for i in range(9*9):
+            r = i//9
+            c = i%9
+            g = 0
+            x = puzzle[r][c]
+            if not x:
+                candidates = set(range(9))-rows[r]-cols[c]-regions[g]
+                if len(candidates) == 1:
+                    n = candidates.pop()
+                    puzzle[r][c] = n
+                    rows[r].add(n)
+                    cols[c].add(n)
+                    regions[g].add(n)
+        break
+
+    return puzzle
